@@ -6,9 +6,7 @@ import (
 	"log"
 )
 
-func bwt(sequence []byte) string {
-	return ""
-}
+import "github.com/shenwei356/bwt"
 
 func main() {
 	content, error := ioutil.ReadFile("genomes/test.fasta")
@@ -18,7 +16,7 @@ func main() {
 	}
 
 	// BWT
-	var bwt string = bwt(content)
+	bwt, error := bwt(content)
 
 	// Artithmetic coding
 
