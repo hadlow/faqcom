@@ -1,4 +1,4 @@
-## GenomDB - A datastore for genomic information
+# GenomDB - A datastore for genomic information
 
 Goals (in order):
 - be scaleable
