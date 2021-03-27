@@ -5,19 +5,22 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"flag"
 )
 
 // External imports
 import (
-	"github.com/shenwei356/bwt"
 )
 
 func main() {
-	content, error := ioutil.ReadFile("genomes/test.fasta")
+	pfilename := flag.String("file", "", "File path")
+	flag.Parse()
+
+	content, error := ioutil.ReadFile(*pfilename)
 
 	if error != nil {
 		log.Fatal(error)
 	}
 
-	fmt.Println(bwt)
+	fmt.Println(content)
 }
