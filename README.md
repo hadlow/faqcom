@@ -1,5 +1,7 @@
-## FAQCOM - FastA/Q COMpression
+## GenomDB - A datastore for genomic information
 
-A super simple compression algorithm for FASTA or FASTQ files.
-
-Not using the MPEG-G standard.
+Goals (in order):
+- be scaleable
+- distribute amongst servers
+- compress data
+- encrypt data
