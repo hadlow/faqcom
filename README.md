@@ -1,7 +1,9 @@
-# GenomDB - A datastore for genomic information
+# GenomDB - A distributed datastore for genomic information
 
 Goals (in order):
 - be scaleable
-- distribute amongst servers
+- be distributed
+- be fast
 - compress data
 - encrypt data
+
