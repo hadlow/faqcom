@@ -3,9 +3,9 @@ package main
 // Local imports
 import (
 	"fmt"
-	"io/ioutil"
 	"log"
 	"flag"
+	"net/http"
 )
 
 // External imports
@@ -15,36 +15,41 @@ import (
 
 // Flags
 var (
-	pFilename = flag.String("file", "", "File path")
-	pDBLocation = flag.String("db", "", "Database path")
+	pDBLocation = flag.String("database", "", "Database path")
+	pHTTPAddress = flag.String("address", "localhost", "Host HTTP address")
+	pHTTPPort = flag.String("port", "6969", "Host HTTP port")
 )
 
 func validateFlags() {
 	flag.Parse()
-
-	if *pFilename == "" {
-		log.Fatal("Missing filename")
-	}
 
 	if *pDBLocation == "" {
 		log.Fatal("Missing database location")
 	}
 }
 
+func get(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "get")
+}
+
+func set(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "set")
+}
+
 func main() {
 	validateFlags()
 
-	content, error := ioutil.ReadFile(*pFilename)
-
-	if error != nil {
-		log.Fatal(error)
-	}
-
 	db, err := bolt.Open(*pDBLocation, 0600, nil)
+
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	defer db.Close()
 
-	fmt.Println(content)
+	http.HandleFunc("/g", get)
+	http.HandleFunc("/s", set)
+
+	fmt.Println("Starting server on: " + *pHTTPAddress + ":" + *pHTTPPort)
+	log.Fatal(http.ListenAndServe(*pHTTPAddress + ":" + *pHTTPPort, nil))
 }
