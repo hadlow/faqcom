@@ -1,4 +1,4 @@
-module github.com/hadlow/faqcom
+module github.com/hadlow/genomdb
 
 go 1.15
 
