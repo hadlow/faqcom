@@ -8,28 +8,35 @@ import (
 	"net/http"
 )
 
-// External imports
 import (
-	bolt "go.etcd.io/bbolt"
+	"github.com/hadlow/genomdb/src/database"
 )
 
 // Flags
 var (
-	pDBLocation = flag.String("database", "", "Database path")
+	pDBPath = flag.String("database", "", "Database path")
 	pHTTPAddress = flag.String("address", "localhost", "Host HTTP address")
 	pHTTPPort = flag.String("port", "6969", "Host HTTP port")
 )
 
+type HTTPHandler struct {
+	DB database.Database
+}
+
 func validateFlags() {
 	flag.Parse()
 
-	if *pDBLocation == "" {
+	if *pDBPath == "" {
 		log.Fatal("Missing database location")
 	}
 }
 
-func get(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "get")
+func (d *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	key := r.Form.Get("key")
+
+	value, err := d.DB.Get(key)
 }
 
 func set(w http.ResponseWriter, r *http.Request) {
@@ -39,17 +46,17 @@ func set(w http.ResponseWriter, r *http.Request) {
 func main() {
 	validateFlags()
 
-	db, err := bolt.Open(*pDBLocation, 0600, nil)
+	database, close, err := database.New(*pDBPath)
 
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Error opening database")
 	}
 
-	defer db.Close()
-
-	http.HandleFunc("/g", get)
+	http.HandleFunc("/g", &HTTPHandler{DB: database})
 	http.HandleFunc("/s", set)
 
 	fmt.Println("Starting server on: " + *pHTTPAddress + ":" + *pHTTPPort)
 	log.Fatal(http.ListenAndServe(*pHTTPAddress + ":" + *pHTTPPort, nil))
+
+	defer close()
 }
