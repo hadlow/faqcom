@@ -20,15 +20,7 @@ var (
 )
 
 type HTTPHandler struct {
-	DB database.Database
-}
-
-func validateFlags() {
-	flag.Parse()
-
-	if *pDBPath == "" {
-		log.Fatal("Missing database location")
-	}
+	DB *database.Database
 }
 
 func (d *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
@@ -37,10 +29,24 @@ func (d *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	key := r.Form.Get("key")
 
 	value, err := d.DB.Get(key)
+
+	if err != nil {
+		log.Fatal("error getting value")
+	}
+
+	fmt.Println(value)
 }
 
 func set(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "set")
+}
+
+func validateFlags() {
+	flag.Parse()
+
+	if *pDBPath == "" {
+		log.Fatal("Missing database location")
+	}
 }
 
 func main() {
@@ -52,7 +58,7 @@ func main() {
 		log.Fatal("Error opening database")
 	}
 
-	http.HandleFunc("/g", &HTTPHandler{DB: database})
+	http.Handle("/g", &HTTPHandler{DB: database})
 	http.HandleFunc("/s", set)
 
 	fmt.Println("Starting server on: " + *pHTTPAddress + ":" + *pHTTPPort)
