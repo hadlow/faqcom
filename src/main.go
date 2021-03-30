@@ -19,11 +19,11 @@ var (
 	pHTTPPort = flag.String("port", "6969", "Host HTTP port")
 )
 
-type HTTPHandler struct {
+type GetHandler struct {
 	DB *database.Database
 }
 
-func (d *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+func (d *GetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	key := r.Form.Get("key")
@@ -31,14 +31,29 @@ func (d *HTTPHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	value, err := d.DB.Get(key)
 
 	if err != nil {
-		log.Fatal("error getting value")
+		log.Fatal("Error getting value")
 	}
 
 	fmt.Println(value)
 }
 
-func set(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "set")
+type SetHandler struct {
+	DB *database.Database
+}
+
+func (d *SetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	key := r.Form.Get("key")
+	value := r.Form.Get("data")
+
+	err := d.DB.Set(key, []byte(value))
+
+	if err != nil {
+		log.Fatal("Error setting value")
+	}
+
+	fmt.Println("Key value set")
 }
 
 func validateFlags() {
@@ -53,13 +68,14 @@ func main() {
 	validateFlags()
 
 	database, close, err := database.New(*pDBPath)
+	database.SetBucket("main")
 
 	if err != nil {
 		log.Fatal("Error opening database")
 	}
 
-	http.Handle("/g", &HTTPHandler{DB: database})
-	http.HandleFunc("/s", set)
+	http.Handle("/g", &GetHandler{DB: database})
+	http.Handle("/s", &SetHandler{DB: database})
 
 	fmt.Println("Starting server on: " + *pHTTPAddress + ":" + *pHTTPPort)
 	log.Fatal(http.ListenAndServe(*pHTTPAddress + ":" + *pHTTPPort, nil))

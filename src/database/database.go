@@ -27,8 +27,20 @@ func New(dbPath string) (db *Database, closeCallback func() error, err error) {
 	return
 }
 
-func (d *Database) SetBucket(bucket string) {
+func (d *Database) SetBucket(bucket string) error {
+	err := d.connection.Update(func(tx *bolt.Tx) error {
+		_, err := tx.CreateBucketIfNotExists([]byte(bucket))
+
+		return err
+	})
+
+	if err != nil {
+		return err
+	}
+
 	d.bucket = []byte(bucket)
+
+	return nil
 }
 
 func (d *Database) Get(key string) (value []byte, err error) {
