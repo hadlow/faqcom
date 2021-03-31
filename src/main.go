@@ -10,6 +10,7 @@ import (
 
 import (
 	"github.com/hadlow/genomdb/src/database"
+	"github.com/hadlow/genomdb/src/endpoints"
 )
 
 // Flags
@@ -18,43 +19,6 @@ var (
 	pHTTPAddress = flag.String("address", "localhost", "Host HTTP address")
 	pHTTPPort = flag.String("port", "6969", "Host HTTP port")
 )
-
-type GetHandler struct {
-	DB *database.Database
-}
-
-func (d *GetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-
-	key := r.Form.Get("key")
-
-	value, err := d.DB.Get(key)
-
-	if err != nil {
-		log.Fatal("Error getting value")
-	}
-
-	fmt.Println(value)
-}
-
-type SetHandler struct {
-	DB *database.Database
-}
-
-func (d *SetHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
-
-	key := r.Form.Get("key")
-	value := r.Form.Get("data")
-
-	err := d.DB.Set(key, []byte(value))
-
-	if err != nil {
-		log.Fatal("Error setting value")
-	}
-
-	fmt.Println("Key value set")
-}
 
 func validateFlags() {
 	flag.Parse()
@@ -74,8 +38,10 @@ func main() {
 		log.Fatal("Error opening database")
 	}
 
-	http.Handle("/g", &GetHandler{DB: database})
-	http.Handle("/s", &SetHandler{DB: database})
+	ep := endpoints.New(database)
+
+	http.HandleFunc("/g", ep.Get)
+	http.HandleFunc("/s", ep.Set)
 
 	fmt.Println("Starting server on: " + *pHTTPAddress + ":" + *pHTTPPort)
 	log.Fatal(http.ListenAndServe(*pHTTPAddress + ":" + *pHTTPPort, nil))
