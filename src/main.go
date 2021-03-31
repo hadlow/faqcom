@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"flag"
-	"net/http"
 )
 
 import (
@@ -40,11 +39,8 @@ func main() {
 
 	ep := endpoints.New(database)
 
-	http.HandleFunc("/g", ep.Get)
-	http.HandleFunc("/s", ep.Set)
-
 	fmt.Println("Starting server on: " + *pHTTPAddress + ":" + *pHTTPPort)
-	log.Fatal(http.ListenAndServe(*pHTTPAddress + ":" + *pHTTPPort, nil))
+	log.Fatal(ep.Serve(*pHTTPAddress, *pHTTPPort))
 
 	defer close()
 }
