@@ -14,7 +14,7 @@ type Database struct {
 	bucket []byte
 }
 
-func New(dbPath string) (db *Database, closeCallback func() error, err error) {
+func NewDatabase(dbPath string) (db *Database, closeCallback func() error, err error) {
 	connection, err := bolt.Open(dbPath, 0600, nil)
 
 	if err != nil {

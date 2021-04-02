@@ -30,7 +30,7 @@ func validateFlags() {
 func main() {
 	validateFlags()
 
-	database, close, err := database.New(*pDBPath)
+	database, close, err := database.NewDatabase(*pDBPath)
 	database.SetBucket("main")
 
 	if err != nil {
