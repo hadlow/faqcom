@@ -18,10 +18,10 @@ type Config struct {
 	} `yaml:"shards"`
 }
 
-func loadConfig() (Config, error) {
+func loadConfig(path string) (Config, error) {
 	var config Config
 
-	data, errRead := ioutil.ReadFile("./config.yml")
+	data, errRead := ioutil.ReadFile(path)
 
 	if errRead != nil {
 		return config, errRead

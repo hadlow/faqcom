@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"flag"
+	"strconv"
 )
 
 import (
@@ -14,39 +15,33 @@ import (
 
 // Flags
 var (
-	pDBPath = flag.String("database", "", "Database path")
-	pHTTPAddress = flag.String("address", "localhost", "Host HTTP address")
-	pHTTPPort = flag.String("port", "6969", "Host HTTP port")
+	pConfigPath = flag.String("config", "./config.yml", "Path to the config YAML file")
 )
 
 func validateFlags() {
 	flag.Parse()
-
-	if *pDBPath == "" {
-		log.Fatal("Missing database location")
-	}
 }
 
 func main() {
 	validateFlags()
 
-	database, close, err := database.NewDatabase(*pDBPath)
+	config, err := loadConfig(*pConfigPath)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	database, close, err := database.NewDatabase(config.Database)
 	database.SetBucket("main")
 
 	if err != nil {
 		log.Fatal("Error opening database")
 	}
 
-	config, err := loadConfig()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
 	ep := endpoints.New(database)
 
-	fmt.Println("Starting server on: " + *pHTTPAddress + ":" + *pHTTPPort)
-	log.Fatal(ep.Serve(*pHTTPAddress, *pHTTPPort))
+	fmt.Println("Starting server on: " + config.Host + ":" + strconv.Itoa(config.Port))
+	log.Fatal(ep.Serve(config.Host, config.Port))
 
 	defer close()
 }

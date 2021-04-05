@@ -2,6 +2,7 @@ package endpoints
 
 // Local imports
 import (
+	"strconv"
 	"net/http"
 )
 
@@ -19,9 +20,9 @@ func New(DB *database.Database) *Endpoint {
 	}
 }
 
-func (e *Endpoint) Serve(address string, port string) error {
+func (e *Endpoint) Serve(address string, port int) error {
 	http.HandleFunc("/g", e.Get)
 	http.HandleFunc("/s", e.Set)
 
-	return http.ListenAndServe(address + ":" + port, nil)
+	return http.ListenAndServe(address + ":" + strconv.Itoa(port), nil)
 }
