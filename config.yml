@@ -2,9 +2,11 @@ database: "main.db"
 
 host: "127.0.0.1"
 
-port: "6969"
+port: 6969
 
 shards:
-    - name: "shard1"
-    - name: "shard2"
+    - id: 1
+      name: "shard1"
+    - id: 2
+      name: "shard2"
 

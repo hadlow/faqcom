@@ -2,25 +2,36 @@ package main
 
 import (
 	"io/ioutil"
-	"fmt"
 )
 
 import (
 	"gopkg.in/yaml.v2"
 )
 
-func loadConfig() error  {
-	config := ShardConfig{}
+type Config struct {
+	Database string `yaml:"database"`
+	Host string `yaml:"host"`
+	Port int `yaml:"port"`
+	Shards []struct {
+		Id int `yaml:"id"`
+		Name string `yaml:"name"`
+	} `yaml:"shards"`
+}
 
-	data, fileErr := ioutil.ReadFile("./config.yml")
+func loadConfig() (Config, error) {
+	var config Config
 
-	yamlErr := yaml.Unmarshal(data, &config)
+	data, errRead := ioutil.ReadFile("./config.yml")
 
-	if fileErr != nil || yamlErr != nil {
-		return yamlErr
+	if errRead != nil {
+		return config, errRead
 	}
 
-	fmt.Printf("--- t dump:\n%s\n\n", string(config.shards[0].id))
+	errParse := yaml.Unmarshal(data, &config)
 
-	return nil
+	if errParse != nil {
+		return config, errParse
+	}
+
+	return config, nil
 }

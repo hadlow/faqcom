@@ -37,7 +37,11 @@ func main() {
 		log.Fatal("Error opening database")
 	}
 
-	loadShards()
+	config, err := loadConfig()
+
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	ep := endpoints.New(database)
 
