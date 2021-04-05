@@ -1,0 +1,10 @@
+database: "main.db"
+
+host: "127.0.0.1"
+
+port: "6969"
+
+shards:
+    - name: "shard1"
+    - name: "shard2"
+

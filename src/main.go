@@ -37,6 +37,8 @@ func main() {
 		log.Fatal("Error opening database")
 	}
 
+	loadShards()
+
 	ep := endpoints.New(database)
 
 	fmt.Println("Starting server on: " + *pHTTPAddress + ":" + *pHTTPPort)
