@@ -5,6 +5,8 @@ host: "localhost"
 port: 6969
 
 shards:
+    - id: 0
+      name: "shard0"
     - id: 1
       name: "shard1"
     - id: 2

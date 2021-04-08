@@ -13,6 +13,8 @@ func (e *Endpoint) Set(w http.ResponseWriter, r *http.Request) {
 	key := r.Form.Get("key")
 	value := r.Form.Get("data")
 
+	shard := e.getShard(key)
+
 	err := e.DB.Set(key, []byte(value))
 
 	if err != nil {
