@@ -16,13 +16,13 @@ import (
 // Flags
 var (
 	pConfigPath = flag.String("config", "./config.yml", "Path to the config YAML file")
-	pShard = flag.String("shard", "", "Shard number")
+	pShard = flag.Int("shard", -1, "Shard number")
 )
 
 func validateFlags() {
 	flag.Parse()
 
-	if *pShard == "" {
+	if *pShard == -1 {
 		log.Fatal("No shard number used")
 	}
 }
@@ -43,7 +43,7 @@ func main() {
 		log.Fatal("Error opening database")
 	}
 
-	ep := endpoints.New(database, *pShard, len(config.Shards))
+	ep := endpoints.New(database, *pShard, config.Shards)
 
 	fmt.Println("Starting server on: " + config.Host + ":" + strconv.Itoa(config.Port))
 	log.Fatal(ep.Serve(config.Host, config.Port))

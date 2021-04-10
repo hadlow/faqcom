@@ -17,6 +17,12 @@ func (e *Endpoint) Set(w http.ResponseWriter, r *http.Request) {
 
 	err := e.DB.Set(key, []byte(value))
 
+	if shard != e.ShardId {
+		e.Route(w, r, shard)
+
+		return
+	}
+
 	if err != nil {
 		log.Fatal("Error setting value")
 	}

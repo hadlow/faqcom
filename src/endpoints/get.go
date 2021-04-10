@@ -15,6 +15,12 @@ func (e *Endpoint) Get(w http.ResponseWriter, r *http.Request) {
 
 	shard := e.getShard(key)
 
+	if shard != e.ShardId {
+		e.Route(w, r, shard)
+
+		return
+	}
+
 	if err != nil {
 		log.Fatal("Error getting value")
 	}
