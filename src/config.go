@@ -5,6 +5,10 @@ import (
 )
 
 import (
+	"github.com/hadlow/genomdb/src/types"
+)
+
+import (
 	"gopkg.in/yaml.v2"
 )
 
@@ -12,12 +16,7 @@ type Config struct {
 	Database string `yaml:"database"`
 	Host string `yaml:"host"`
 	Port int `yaml:"port"`
-	Shards []struct {
-		Id int `yaml:"id"`
-		Name string `yaml:"name"`
-		Host string `yaml:"host"`
-		Port int `yaml:"port"`
-	} `yaml:"shards"`
+	Shards []types.Shard `yaml:"shards"`
 }
 
 func loadConfig(path string) (Config, error) {

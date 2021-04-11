@@ -11,22 +11,16 @@ import (
 
 import (
 	"github.com/hadlow/genomdb/src/database"
+	"github.com/hadlow/genomdb/src/types"
 )
-
-type Shard struct {
-	Id int
-	Name string
-	Host string
-	Port int
-}
 
 type Endpoint struct {
 	DB *database.Database
 	ShardId int
-	Shards []Shard
+	Shards []types.Shard
 }
 
-func New(DB *database.Database, shardId int, shards []Shard) *Endpoint {
+func New(DB *database.Database, shardId int, shards []types.Shard) *Endpoint {
 	return &Endpoint {
 		DB: DB,
 		ShardId: shardId,
