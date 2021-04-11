@@ -8,6 +8,7 @@ import (
 )
 
 func TestGetSet(t *testing.T) {
+	// Create a temporary database file
 	file, err := ioutil.TempFile(os.TempDir(), "test.db")
 
 	if err != nil {
@@ -17,6 +18,7 @@ func TestGetSet(t *testing.T) {
 	defer file.Close()
 	defer os.Remove(file.Name())
 
+	// Open the database and set the bucket
 	database, close, err := NewDatabase(file.Name())
 	database.SetBucket("main")
 
@@ -26,6 +28,7 @@ func TestGetSet(t *testing.T) {
 
 	defer close()
 
+	// Set a value
 	err = database.Set("test", []byte("value"))
 
 	if err != nil {
@@ -42,14 +45,4 @@ func TestGetSet(t *testing.T) {
 	if !bytes.Equal(value, []byte("value")) {
 		t.Fatalf("Wrong key from database")
 	}
-}
-
-func fileExists(filename string) bool {
-	info, err := os.Stat(filename)
-
-	if os.IsNotExist(err) {
-		return false
-	}
-
-	return !info.IsDir()
 }

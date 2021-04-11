@@ -28,6 +28,7 @@ shards:
 `
 
 func TestLoadConfig(t *testing.T) {
+	// Create temporary YAML file
 	file, err := ioutil.TempFile(os.TempDir(), "config.yml")
 
 	if err != nil {
@@ -43,6 +44,7 @@ func TestLoadConfig(t *testing.T) {
 		t.Fatal("Error writing to file")
 	}
 
+	// Load the YAML config
 	config, err := loadConfig(file.Name())
 
 	if err != nil {
@@ -69,6 +71,7 @@ func TestLoadConfig(t *testing.T) {
 		},
 	}
 
+	// Test that we get the expected value back
 	if !reflect.DeepEqual(config, expected) {
 		t.Fatal("Config not expected")
 	}
