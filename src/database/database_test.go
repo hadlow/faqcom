@@ -7,29 +7,6 @@ import (
 	"io/ioutil"
 )
 
-func TestDatabase(t *testing.T) {
-	databasePath := "test.db"
-	database, close, err := NewDatabase(databasePath)
-
-	if err != nil {
-		t.Error(err)
-	}
-
-	database.SetBucket("main")
-
-	defer close()
-
-	if fileExists(databasePath) {
-		dErr := os.Remove(databasePath)
-
-		if dErr != nil {
-			t.Error("Database can't be deleted")
-		}
-	} else {
-		t.Error("Database file not set")
-	}
-}
-
 func TestGetSet(t *testing.T) {
 	file, err := ioutil.TempFile(os.TempDir(), "test.db")
 
