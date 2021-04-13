@@ -1,15 +1,12 @@
 package endpoints
 
-// Local imports
 import (
 	"fmt"
 	"io"
 	"strconv"
 	"net/http"
 	"hash/fnv"
-)
 
-import (
 	"github.com/hadlow/genomdb/src/database"
 	"github.com/hadlow/genomdb/src/types"
 )

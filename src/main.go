@@ -6,9 +6,7 @@ import (
 	"log"
 	"flag"
 	"strconv"
-)
-
-import (
+	
 	"github.com/hadlow/genomdb/src/database"
 	"github.com/hadlow/genomdb/src/endpoints"
 )

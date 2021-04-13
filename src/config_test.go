@@ -5,9 +5,7 @@ import (
 	"os"
 	"reflect"
 	"io/ioutil"
-)
-
-import (
+	
 	"github.com/hadlow/genomdb/src/types"
 )
 

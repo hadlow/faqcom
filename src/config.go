@@ -2,13 +2,9 @@ package main
 
 import (
 	"io/ioutil"
-)
 
-import (
 	"github.com/hadlow/genomdb/src/types"
-)
-
-import (
+	
 	"gopkg.in/yaml.v2"
 )
 

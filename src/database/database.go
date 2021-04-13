@@ -1,10 +1,5 @@
 package database
 
-// Local imports
-import (
-)
-
-// External imports
 import (
 	bolt "go.etcd.io/bbolt"
 )

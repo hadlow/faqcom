@@ -1,6 +1,5 @@
 package endpoints
 
-// Local imports
 import (
 	"fmt"
 	"log"
