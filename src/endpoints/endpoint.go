@@ -26,6 +26,7 @@ func New(DB *database.Database, shardId int, shards []types.Shard) *Endpoint {
 }
 
 func (e *Endpoint) Serve(address string, port int) error {
+	// Setup the endpoints to access (TODO - make seperate array)
 	http.HandleFunc("/g", e.Get)
 	http.HandleFunc("/s", e.Set)
 
@@ -33,9 +34,11 @@ func (e *Endpoint) Serve(address string, port int) error {
 }
 
 func (e *Endpoint) getShard(key string) int {
+	// Get the shard by hashing the key
 	hash := fnv.New64()
 	hash.Write([]byte(key))
 
+	// And then getting the remainder of the hash / the number of shards
 	shardId := int(hash.Sum64() % uint64(len(e.Shards)))
 
 	return shardId

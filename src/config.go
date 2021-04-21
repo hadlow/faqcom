@@ -16,6 +16,7 @@ type Config struct {
 }
 
 func loadConfig(path string) (Config, error) {
+	// Load the config file and return as object
 	var config Config
 
 	data, errRead := ioutil.ReadFile(path)

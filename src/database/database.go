@@ -10,12 +10,14 @@ type Database struct {
 }
 
 func NewDatabase(dbPath string) (db *Database, closeCallback func() error, err error) {
+	// Open the database connection
 	connection, err := bolt.Open(dbPath, 0600, nil)
 
 	if err != nil {
 		return nil, nil, err
 	}
 
+	// Return the databsae object
 	db = &Database{connection: connection, bucket: []byte("default")}
 	closeCallback = connection.Close
 
