@@ -12,3 +12,5 @@ WORKDIR /
 
 ENV GOPATH /go
 ENV PATH ${PATH}:genomdb
+
+RUN nginx -c /nginx/server.conf
