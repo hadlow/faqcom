@@ -13,4 +13,8 @@ WORKDIR /
 ENV GOPATH /go
 ENV PATH ${PATH}:genomdb
 
-RUN nginx -c /nginx/server.conf
+COPY src /genomdb
+
+COPY /server/goweb.service /lib/systemd/system
+
+RUN service goweb start
